@@ -1,5 +1,5 @@
-name: "Cherry-Pick Github Action"
-description: "GitHub action for cherry pick commits from Pull Requests into Release branches"
+name: "Xealth Cherry Picker"
+description: "An action to automatically cherry pick changes into release branches via labels"
 inputs:
   token:
     description: "GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)"
