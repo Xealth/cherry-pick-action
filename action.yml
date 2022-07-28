@@ -1,5 +1,5 @@
 name: "Xealth Cherry Picker"
-description: "An action to automatically cherry pick changes into release branches via labels"
+description: "Use PR labels and other workflows to cherry pick commits into release branches"
 inputs:
   token:
     description: "GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)"
