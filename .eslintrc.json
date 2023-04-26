@@ -1,16 +1,14 @@
-module.exports = {
+{
   "plugins": ["jest", "@typescript-eslint"],
   "extends": ["plugin:github/recommended", "plugin:@typescript-eslint/recommended-requiring-type-checking"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 9,
     "sourceType": "module",
-    "project": {
-      "project": true,
-      "tsconfigRootDir": __dirname
-    }
+    "project": ["./tsconfig.json", "./tsconfig.spec.json"]
   },
   "rules": {
+    "filenames/match-regex": "off",
     "i18n-text/no-en": "off",
     "eslint-comments/no-use": "off",
     "import/no-namespace": "off",

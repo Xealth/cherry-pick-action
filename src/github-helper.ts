@@ -42,15 +42,15 @@ export async function createPullRequest(
     const title =
       github.context.payload &&
       github.context.payload.pull_request &&
-      github.context.payload.pull_request.title
-    core.info(`Using body '${title}'`)
+      (github.context.payload.pull_request.title as unknown as string)
+    core.info(`Using title '${title || ''}'`)
 
     // Get PR body
     const body =
       github.context.payload &&
       github.context.payload.pull_request &&
-      github.context.payload.pull_request.body
-    core.info(`Using body '${body}'`)
+      (github.context.payload.pull_request.body as unknown as string)
+    core.info(`Using body '${body || ''}'`)
 
     // Create PR
     const pull = await octokit.rest.pulls.create({
@@ -64,10 +64,10 @@ export async function createPullRequest(
 
     // Apply labels
     if (inputs.labels.length > 0) {
-      const prLabels: Label[] =
+      const prLabels =
         github.context.payload &&
         github.context.payload.pull_request &&
-        github.context.payload.pull_request.labels
+        (github.context.payload.pull_request.labels as unknown as Label[])
 
       if (prLabels) {
         for (const label of prLabels) {
@@ -79,7 +79,7 @@ export async function createPullRequest(
       // if allowUserToSpecifyBranchViaLabel is true, we
       // only want the branch label, configured labels, and PR labels to be applied
       // this is done with filterIrrelevantBranchLabels()
-      core.info(`Applying labels '${inputs.labels}'`)
+      core.info(`Applying labels '${JSON.stringify(inputs.labels)}'`)
       await octokit.rest.issues.addLabels({
         owner,
         repo,
@@ -92,7 +92,7 @@ export async function createPullRequest(
 
     // Apply assignees
     if (inputs.assignees.length > 0) {
-      core.info(`Applying assignees '${inputs.assignees}'`)
+      core.info(`Applying assignees '${JSON.stringify(inputs.assignees)}'`)
       await octokit.rest.issues.addAssignees({
         owner,
         repo,
@@ -104,7 +104,7 @@ export async function createPullRequest(
     // Request reviewers and team reviewers
     try {
       if (inputs.reviewers.length > 0) {
-        core.info(`Requesting reviewers '${inputs.reviewers}'`)
+        core.info(`Requesting reviewers '${JSON.stringify(inputs.reviewers)}'`)
         await octokit.rest.pulls.requestReviewers({
           owner,
           repo,
@@ -113,7 +113,9 @@ export async function createPullRequest(
         })
       }
       if (inputs.teamReviewers.length > 0) {
-        core.info(`Requesting team reviewers '${inputs.teamReviewers}'`)
+        core.info(
+          `Requesting team reviewers '${JSON.stringify(inputs.teamReviewers)}'`
+        )
         await octokit.rest.pulls.requestReviewers({
           owner,
           repo,
@@ -121,12 +123,15 @@ export async function createPullRequest(
           team_reviewers: inputs.teamReviewers
         })
       }
-    } catch (e: any) {
-      if (e.message && e.message.includes(ERROR_PR_REVIEW_FROM_AUTHOR)) {
-        core.warning(ERROR_PR_REVIEW_FROM_AUTHOR)
-      } else {
-        throw e
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        if (e.message && e.message.includes(ERROR_PR_REVIEW_FROM_AUTHOR)) {
+          core.warning(ERROR_PR_REVIEW_FROM_AUTHOR)
+        } else {
+          throw e
+        }
       }
+      throw e
     }
   }
 }
@@ -136,8 +141,11 @@ export function buildBranchesFromLabels(inputs: Inputs): string[] {
   const potentialBranches =
     github.context.payload &&
     github.context.payload.pull_request &&
-    github.context.payload.pull_request.labels
+    (github.context.payload.pull_request.labels as unknown as Label[])
   core.info(`potential branches ${JSON.stringify(potentialBranches)}`)
+  if (!potentialBranches) {
+    throw Error('no labels found for cherry picking')
+  }
   const matchedLabels = potentialBranches.map(
     (branchToCheck: {name: string}) => {
       return utils.validatelabelPatternRequirement(
@@ -146,7 +154,7 @@ export function buildBranchesFromLabels(inputs: Inputs): string[] {
       )
     }
   )
-  const filteredLabels: any = _.compact(matchedLabels)
+  const filteredLabels = _.compact(matchedLabels)
   core.info(`branch labels ${JSON.stringify(filteredLabels)}`)
   return filteredLabels.map((matchedLabel: string) => {
     return utils.parseBranchFromLabel(inputs.userBranchPrefix, matchedLabel)
