@@ -3,7 +3,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "types": ["jest", "node"],
-    "strict": true
+    "strict": true,
+    "rootDir": "./test"
   },
   "include": [
     "jest.config.ts",
