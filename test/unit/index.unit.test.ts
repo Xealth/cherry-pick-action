@@ -21,9 +21,8 @@ describe('filterExecutionStatuses', () => {
     }
   ]
   it('should filter correctly', () => {
-    const {completedCherryPicks, cherryPickErrors} = filterExecutionStatuses(
-      Statuses
-    )
+    const {completedCherryPicks, cherryPickErrors} =
+      filterExecutionStatuses(Statuses)
     expect(completedCherryPicks.length).toBe(2)
     expect(cherryPickErrors.length).toBe(1)
   })

@@ -60,9 +60,8 @@ export async function run(): Promise<void> {
     }
   }
 
-  const {completedCherryPicks, cherryPickErrors} = filterExecutionStatuses(
-    executions
-  )
+  const {completedCherryPicks, cherryPickErrors} =
+    filterExecutionStatuses(executions)
 
   core.info(`Finished cherry picking ${JSON.stringify(completedCherryPicks)}!`)
   core.info(`Failed to cherry pick ${JSON.stringify(cherryPickErrors)}`)
