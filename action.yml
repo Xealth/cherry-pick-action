@@ -47,7 +47,7 @@ inputs:
       A prefix to apply to the target release branch. Ex: v -> v1.0.0 or release- -> release-1.0.0
   
 runs:
-  using: node18
+  using: node16
   main: dist/index.js
 branding:
   icon: 'git-pull-request'
