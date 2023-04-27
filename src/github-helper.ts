@@ -64,7 +64,7 @@ export async function createPullRequest(
 
     // Apply labels
     if (inputs.labels.length > 0) {
-      const prLabels =
+      const prLabels = github.context.payload?.pull_request?.labels ?? []
         github.context.payload &&
         github.context.payload.pull_request &&
         (github.context.payload.pull_request.labels as unknown as Label[])
