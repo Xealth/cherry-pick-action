@@ -64,10 +64,9 @@ export async function createPullRequest(
 
     // Apply labels
     if (inputs.labels.length > 0) {
-      const prLabels = github.context.payload?.pull_request?.labels ?? []
-        github.context.payload &&
-        github.context.payload.pull_request &&
-        (github.context.payload.pull_request.labels as unknown as Label[])
+      const prLabels =
+        (github.context.payload?.pull_request?.labels as unknown as Label[]) ??
+        []
 
       if (prLabels) {
         for (const label of prLabels) {
@@ -139,9 +138,7 @@ export async function createPullRequest(
 export function buildBranchesFromLabels(inputs: Inputs): string[] {
   core.info(`inputs ${JSON.stringify(inputs)}`)
   const potentialBranches =
-    github.context.payload &&
-    github.context.payload.pull_request &&
-    (github.context.payload.pull_request.labels as unknown as Label[])
+    (github.context.payload?.pull_request?.labels as unknown as Label[]) ?? []
   core.info(`potential branches ${JSON.stringify(potentialBranches)}`)
   if (!potentialBranches) {
     throw Error('no labels found for cherry picking')
