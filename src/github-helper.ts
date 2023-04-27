@@ -43,7 +43,7 @@ export async function createPullRequest(
       github.context.payload &&
       github.context.payload.pull_request &&
       (github.context.payload.pull_request.title as unknown as string)
-    core.info(`Using title '${title || ''}'`)
+    core.info(`Using title '${title ?? ''}'`)
 
     // Get PR body
     const body =
