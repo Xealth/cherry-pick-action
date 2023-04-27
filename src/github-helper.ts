@@ -50,7 +50,7 @@ export async function createPullRequest(
       github.context.payload &&
       github.context.payload.pull_request &&
       (github.context.payload.pull_request.body as unknown as string)
-    core.info(`Using body '${body || ''}'`)
+    core.info(`Using body '${body ?? ''}'`)
 
     // Create PR
     const pull = await octokit.rest.pulls.create({
