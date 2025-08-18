@@ -33,7 +33,7 @@ describe('parseBranchFromLabel', () => {
     const test = 'CP 1209.'
     expect(() => {
       parseBranchFromLabel('', test)
-    }).toThrowError()
+    }).toThrow()
   })
 })
 
