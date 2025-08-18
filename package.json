@@ -1,7 +1,8 @@
 {
   "name": "cherry-pick-action",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
+  "type": "module",
   "description": "A Cherry Pick GitHub Action 🍒",
   "main": "dist/index.js",
   "engines": {
@@ -11,7 +12,7 @@
     "build": "tsc && npm run package ",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "lint": "eslint src/**/*.ts --fix --config .eslintrc.json",
+    "lint": "eslint src/**/*.ts --fix",
     "package": "ncc build ./src/index.ts",
     "test": "jest --runInBand",
     "all": "npm run test && npm run format && npm run lint && npm run build"
@@ -40,6 +41,7 @@
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.20",
     "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.39.1",
     "@vercel/ncc": "^0.38.3",
     "eslint": "^9.33.0",
