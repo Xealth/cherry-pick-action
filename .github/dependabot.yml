@@ -7,3 +7,39 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: 'daily'
+    # Let a release age before adopting it, so a bad release can be pulled first.
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+    ignore:
+      # Moves with .nvmrc / the action's `runs.using` Node version, not on its own.
+      - dependency-name: '@types/node'
+        update-types:
+          - 'version-update:semver-major'
+    groups:
+      npm-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      # Majors open one PR per package, except these families, which move together.
+      npm-major-eslint:
+        applies-to: version-updates
+        patterns:
+          - 'eslint'
+          - 'eslint-*'
+          - '@typescript-eslint/*'
+          - 'prettier'
+        update-types:
+          - 'major'
+      npm-major-jest:
+        applies-to: version-updates
+        patterns:
+          - 'jest'
+          - 'jest-*'
+          - 'ts-jest'
+          - '@types/jest'
+        update-types:
+          - 'major'
